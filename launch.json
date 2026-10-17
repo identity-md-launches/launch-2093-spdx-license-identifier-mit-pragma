@@ -1,0 +1,21 @@
+{
+  "kind": "evm_contracts",
+  "contracts": [
+    {
+      "contract": "SuperIMD",
+      "constructorArgs": [
+        "1000000000000000000000000000",
+        "$owner"
+      ]
+    },
+    {
+      "contract": "SuperIMDHookFactory",
+      "constructorArgs": [
+        "$owner",
+        "$owner",
+        "$contract:SuperIMD"
+      ]
+    }
+  ],
+  "notes": "SuperIMD mints exactly 1,000,000,000 SIMD with 18 decimals (10^27 base units) to $owner. It supports ERC-2612 permit and fee-free transfers, with no public mint or administrative supply control. SuperIMDHookFactory receives $owner as its immutable owner and fee beneficiary and references the previously deployed SuperIMD token. Its PoolManager is initially unset and its hook is initially undeployed. Activation remains a separate owner operation: verify and configure a compatible PoolManager, then deploy the single SuperIMDHook using a CREATE2 salt whose predicted address has low 14 bits 0x0044. The manager choice freezes on hook deployment. No target-chain manager address is supplied or verified here. The accepted hook charges an immutable 200-basis-point fee, rounded down, on the unspecified currency of swaps in pools containing SuperIMD: output for exact-input swaps and input for exact-output swaps. Fees accrue as PoolManager claims redeemable only by the immutable beneficiary to its chosen recipient. Manager identity is trusted; the factory's code-presence check does not authenticate it. Other venues and direct transfers incur no hook fee, and amounts below 50 base units round to zero. Owner and beneficiary roles have no rotation or recovery. This manifest describes the token and factory deployment; it does not activate the hook or create or fund a trading pool."
+}
